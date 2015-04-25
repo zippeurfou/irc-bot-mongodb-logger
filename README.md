@@ -32,4 +32,8 @@ It is optimized for WA, therefore you should also edit the client constructor in
 
 Just add it in app.js with a parameter for the bot and then listen to on events or create your own event emitter in the new module. You should emit your event with the bot object as it would add consitency to your code.
 
+## Special note
+
+The irc server is based on node-irc adding the who feature.
+
 
