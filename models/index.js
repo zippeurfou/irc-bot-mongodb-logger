@@ -8,32 +8,93 @@ var Schema = mongoose.Schema;
 
 
 //Everything as a string because they can actually trick irc to whatever they want to.
-var UserSchema=new Schema({
-  nick:String,
-  right:String,
-  countryCode:String,
-  countryName:String,
-  rank:String,
-  clientName:String
+var UserSchema = new Schema({
+    nick: String,
+    right: String,
+    countryCode: String,
+    countryName: String,
+    rank: String,
+    clientName: String
 });
 
 
-var EventSchema=new Schema({
-  user: {type: Schema.Types.ObjectId, ref: 'User'},
-  type:String,
-  to:String,
-  message:String,
-  date: { type: Date, default: Date.now }
+var EventSchema = new Schema({
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    type: String,
+    to: String,
+    message: String,
+    date: {
+        type: Date,
+        default: Date.now
+    }
 
 });
+
+EventSchema.statics.findLastMessageByUser = function(nick, cb) {
+    return mongoose.model('User').findOne({
+        nick: nick
+    }, function(err, us) {
+        if (err) {
+            cb(err, null);
+        } else if (us === null) {
+            cb("user not found", null);
+        } else {
+            var id = us.id;
+            mongoose.model('Event')
+                .find({
+                    user: id,
+                    type: "message"
+                }).sort({
+                    "date": -1
+                }).limit(1).exec(function(err, event) {
+                    if (err) {
+                        cb(err, null);
+                    } else if (event.length== 0) {
+                        cb("user found but did not write any message", null)
+                    } else {
+                      cb(null,event[0]);
+                    }
+                });
+        }
+    });
+}
+
+EventSchema.statics.findLastActionByUser = function(nick, cb) {
+    return mongoose.model('User').findOne({
+        nick: nick
+    }, function(err, us) {
+        if (err) {
+            cb(err, null);
+        } else if (us === null) {
+            cb("user not found", null);
+        } else {
+            var id = us.id;
+            mongoose.model('Event')
+                .find({
+                    user: id,
+                    type: {'$ne':"who" }
+                }).sort({
+                    "date": -1
+                }).limit(1).exec(function(err, event) {
+                    if (err) {
+                        cb(err, null);
+                    } else if (event.length== 0) {
+                        cb("user found but did not had any action", null)
+                    } else {
+                      cb(null,event[0]);
+                    }
+                });
+        }
+    });
+}
 
 
 
 
 
 //We export it so we can use it with require('./models')
-exports.userModel=mongoose.model('User', UserSchema);
-exports.eventModel=mongoose.model('Event', EventSchema);
-
-
-
+exports.userModel = mongoose.model('User', UserSchema);
+exports.eventModel = mongoose.model('Event', EventSchema);

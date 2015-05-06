@@ -31,7 +31,7 @@ function create_client(username, hostname, password,channels, callback) {
         username: "",
         password: password,
         floodProtection: true,
-        floodProtectionDelay: 1000,
+        floodProtectionDelay: 1000*3,
         messageSplit: 200,
         autoConnect: true
     });

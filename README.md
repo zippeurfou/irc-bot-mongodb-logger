@@ -14,6 +14,7 @@ You have a standard express app with the main file being in app.js. On top of th
 ## Setting up
 
 Create a config.json file at the root of the project with:
+```
 {
   "database":{
     "hostname":"<your config>",
@@ -26,6 +27,7 @@ Create a config.json file at the root of the project with:
     "channels":[<your config>]
   }
 }
+```
 It is optimized for WA, therefore you should also edit the client constructor in the bot.js file for your need.
 
 ## Creating a module

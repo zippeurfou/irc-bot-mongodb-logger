@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 var nconf = require('nconf');
 var Bot = require("./app_modules/bot");
 var botlogger = require("./app_modules/logger");
+var history = require("./app_modules/history");
 nconf.argv()
     .env()
     .file({
@@ -37,6 +38,7 @@ new Bot(conf.irc_bot.username, conf.irc_bot.hostname, conf.irc_bot.password, con
         console.log("starting logger");
         //initialize the mongodb log
         botlogger.initialize(bot);
+        history.initialize(bot);
         //Insert your own module here
   
 
