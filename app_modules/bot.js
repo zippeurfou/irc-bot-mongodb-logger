@@ -10,12 +10,12 @@ var util = require("util");
  * @param {string} hostname of the irc
  * @param {string} password password of the irc
  */
-function Bot(username, hostname, password,channels, callback) {
+function Bot(username, hostname, password, channels, callback) {
     var that = this;
     EventEmitter.call(that);
-    create_client(username, hostname, password,channels, function(client) {
+    create_client(username, hostname, password, channels, function(client) {
         subscribe_events(client, that);
-        createPrototypes(client);
+        createPrototypes(client, that);
         callback(that);
     });
 }
@@ -23,7 +23,7 @@ function Bot(username, hostname, password,channels, callback) {
 util.inherits(Bot, EventEmitter);
 
 
-function create_client(username, hostname, password,channels, callback) {
+function create_client(username, hostname, password, channels, callback) {
     //creation of client with info to connect to wa irc
     var c = new irc.Client(hostname, username, {
         channels: channels,
@@ -31,11 +31,11 @@ function create_client(username, hostname, password,channels, callback) {
         username: "",
         password: password,
         floodProtection: true,
-        floodProtectionDelay: 1000*3,
+        floodProtectionDelay: 1000 * 4,
         messageSplit: 200,
         autoConnect: true
     });
-    c.addListener('registered',function(message) {
+    c.addListener('registered', function(message) {
         callback(c);
     });
 
@@ -78,7 +78,8 @@ function subscribe_events(client, that) {
 
     //error listenner	
     client.addListener('error', function(message) {
-        that.emit('error', message);
+        console.log("there is an error ",message);
+       // that.emit('error', message);
     });
 
     //pm listenner	
@@ -115,7 +116,7 @@ function subscribe_events(client, that) {
 
 }
 
-function createPrototypes(client) {
+function createPrototypes(client, that) {
     Bot.prototype.speak = function(channel, message) {
         client.say(channel, message);
 
@@ -140,9 +141,19 @@ function createPrototypes(client) {
         return client.nick;
     };
 
-    Bot.prototype.who = function(nick,callback) {
+    Bot.prototype.who = function(nick, callback) {
         return client.who(nick, callback);
     };
+
+    Bot.prototype.listenMessage = function(listenner) {
+        client.on("message", function(from, to, message) {
+            if (listenner && message.indexOf(listenner) != -1) {
+                console.log("listnner is",listenner,'emit');
+                that.emit('message:' + listenner, from, to, message);
+            }
+        });
+    }
+
 
 
 
