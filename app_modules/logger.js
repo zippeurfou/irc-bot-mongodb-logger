@@ -52,8 +52,8 @@ function logEvents(bot) {
         }
     });
 
-    bot.on('part', function(nick, reason, channel, message) {
-        handleBotQuery('part', nick, channel, reason);
+    bot.on('part', function(to, from, nothing, raw) {
+        handleBotQuery('part', from, to, "part");
 
     });
 
