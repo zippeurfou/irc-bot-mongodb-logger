@@ -8,9 +8,18 @@ block content
    Just call /:username:
    Right now you might have some bug if people are using special characters.  
   code.  
-       i.e. <a href="luizinho">baseurl/luizinho</a> will give you the history of luzinho
+       i.e. <a href="luizinho">user/luizinho</a> will give you the history of luzinho
   p.
    Ok It's basic but more will come..
+  #content
+  script(type='text/javascript').
+    var  data=!{JSON.stringify(users)};
+    var div = document.getElementById('content');
+	
+    for (var i=0;i<data.length;i++){
+    div.innerHTML = div.innerHTML + '<p><a href="'+data[i].nick+'">'+data[i].nick+'</a> Number of message(s): '+data[i].count+'</p>';
+    }
+
    
   
   
