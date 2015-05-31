@@ -21,7 +21,9 @@ router.get('/user/', function(req, res, next) {
                 "origId": {
                     "$first": "$_id"
                 }
-            }
+            },
+            { $sort : { count : -1 } },
+            { $limit : 50 }
         }], function(err, origEv) {
             //console.log(err,res);
             var events = origEv.map(function(doc) {
@@ -70,24 +72,7 @@ router.get('/user/', function(req, res, next) {
             });
 
         })
-    /* User.aggregate(
-      { $group : { 
-           _id : { year: { $year : "$accessDate" }, month: { $month : "$accessDate" },day: { $dayOfMonth : "$accessDate" }}, 
-           count : { $sum : 1 }}
-           }, 
-      { $group : { 
-           _id : { year: "$_id.year", month: "$_id.month" }, 
-           dailyusage: { $push: { day: "$_id.day", count: "$count" }}}
-           }, 
-      { $group : { 
-           _id : { year: "$_id.year" }, 
-           monthlyusage: { $push: { month: "$_id.month", dailyusage: "$dailyusage" }}}
-           }, 
-      function (err, res)
-           { if (err) ; // TODO handle error 
-             console.log(res); 
-           });
-});*/
+ 
 
 });
 
