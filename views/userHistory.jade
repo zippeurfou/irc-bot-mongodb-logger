@@ -3,6 +3,12 @@ extends layout
 block content
   
   h1 User history
+  #content
   script(type='text/javascript').
     var  data=!{JSON.stringify(ev)};
-    console.log(data);
+    var div = document.getElementById('content');
+	
+    for (var i=0;i<data.length;i++){
+    div.innerHTML = div.innerHTML + '<p> type:'+data[i].type+' to:'+data[i].to+' date:'+data[i].date+(data[i].message?' message:'+data[i].message:'')+'</p>';
+    }
+   

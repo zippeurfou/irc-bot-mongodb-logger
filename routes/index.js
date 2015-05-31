@@ -7,7 +7,7 @@ var express = require('express'),
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.render('index', {
-        title: 'LastFm playground app'
+        title: 'WA bot'
     });
 });
 
@@ -18,20 +18,24 @@ router.get('/:user', function(req, res, next) {
         nick: nick
     }, function(err, us) {
         console.log(err, us);
+        if (us && us.id){
         var id = us.id;
         Event
             .find({
                 user: id
-            }).exec(function(err, ev) {
+            }).populate('user').exec(function(err, ev) {
                 console.log('The creator elem is', ev, us);
                 res.render('userHistory', {
                     ev: ev
                 });
 
             });
-
-
-
+            }
+            else{
+                 res.render('userHistory', {
+                    ev: null
+                });
+            }
     })
 
 

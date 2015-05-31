@@ -32,7 +32,7 @@ function create_client(username, hostname, password, channels, callback) {
         password: password,
         floodProtection: true,
         floodProtectionDelay: 1000 * 4,
-        messageSplit: 200,
+        messageSplit: 445,
         autoConnect: true
     });
     c.addListener('registered', function(message) {
