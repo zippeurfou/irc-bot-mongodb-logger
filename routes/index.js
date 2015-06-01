@@ -21,10 +21,16 @@ router.get('/user/', function(req, res, next) {
                 "origId": {
                     "$first": "$_id"
                 }
+            }},
+            {
+                "$sort": {
+                    "count": -1
+                }
             },
-            { "$sort" : { "count" : -1 } },
-            { "$limit" : 50 }
-        }], function(err, origEv) {
+            {
+                "$limit": 50
+            }
+        ], function(err, origEv) {
             //console.log(err,res);
             var events = origEv.map(function(doc) {
                 doc.user = doc._id;
@@ -39,7 +45,7 @@ router.get('/user/', function(req, res, next) {
                 if (err) throw err;
                 //console.log( JSON.stringify( users, undefined, 4 ) );
                 //console.log(users);
-               // console.log(users[0]._id, events[0].count);
+                // console.log(users[0]._id, events[0].count);
                 var renders = [];
                 for (var i = 0; i < users.length; i++) {
                     if (users[i].user) {
@@ -72,7 +78,7 @@ router.get('/user/', function(req, res, next) {
             });
 
         })
- 
+
 
 });
 
