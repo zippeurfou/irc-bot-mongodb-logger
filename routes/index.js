@@ -22,8 +22,8 @@ router.get('/user/', function(req, res, next) {
                     "$first": "$_id"
                 }
             },
-            { $sort : { count : -1 } },
-            { $limit : 50 }
+            { "$sort" : { "count" : -1 } },
+            { "$limit" : 50 }
         }], function(err, origEv) {
             //console.log(err,res);
             var events = origEv.map(function(doc) {
