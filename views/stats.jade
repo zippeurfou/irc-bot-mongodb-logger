@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  
+  h1 User stats
+  #content
+  script(type='text/javascript').
+    var data=!{JSON.stringify(countries)};
+    var div = document.getElementById('content');
+    console.log(data)
+    for (var i=0;i<data.length;i++){
+    div.innerHTML = div.innerHTML + '<p> code:'+data[i]._id+' count:'+data[i].count+'</p>';
+    }
+   

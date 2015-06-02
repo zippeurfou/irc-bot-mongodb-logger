@@ -21,16 +21,14 @@ router.get('/user/', function(req, res, next) {
                 "origId": {
                     "$first": "$_id"
                 }
-            }},
-            {
-                "$sort": {
-                    "count": -1
-                }
-            },
-            {
-                "$limit": 50
             }
-        ], function(err, origEv) {
+        }, {
+            "$sort": {
+                "count": -1
+            }
+        }, {
+            "$limit": 50
+        }], function(err, origEv) {
             //console.log(err,res);
             var events = origEv.map(function(doc) {
                 doc.user = doc._id;
@@ -81,6 +79,35 @@ router.get('/user/', function(req, res, next) {
 
 
 });
+
+
+router.get('/stats/', function(req, res, next) {
+    User.aggregate(
+        [{
+            "$group": {
+                "_id": "$countryName",
+                "count": {
+                    "$sum": 1
+                }
+            }
+        }, {
+            "$sort": {
+                "count": -1
+            }
+        }, {
+            "$limit": 50
+        }], function(err, result) {
+            console.log(result);
+            res.render('stats', {
+                title: 'WA bot',
+                countries: result
+            });
+        });
+
+
+
+});
+
 
 /* GET user history page. */
 router.get('/user/:user', function(req, res, next) {
